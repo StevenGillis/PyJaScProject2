@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="{{ url_for('static', filename='index.js') }}"></script>
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
+        <title>Chatbox test</title>
+        <link href="/static/styles.css" rel="stylesheet"/>
+    </head>
+    <body>
+    <div class="container">
+        <div class="row">
+            <div class="chatwindow col">
+                    <ul id="chathistory" style="list-style-type:none;">
+                    </ul>
+            </div>
+            <div class="col">
+                <form id="chatsubmit">
+                    <input id="chattext" autocomplete="off" autofocus placeholder="Chat" type="text">
+                    <input type="submit">
+                </form>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="channeloverview">
+                    <form id="addchannel">
+                        <input id="channelname" autocomplete="off" autofocus placeholder="Channelname" type="text">
+                        <input type="submit">
+                    </form>
+                    <ul id="channellist">
+                        </ul>
+                </div>
+            </div>
+            <div class="col">
+                <h3>User: Steven</h3>
+            </div>
+        </div>
+    </div>
+
+    </body>
+</html>
