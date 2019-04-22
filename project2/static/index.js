@@ -21,7 +21,7 @@
     socket.on('announce message', data => {
         console.log('gehoord');
         const li = document.createElement('li');
-        li.innerHTML = `message recorder: ${data.message}`;
+        li.innerHTML = `${data.message}`;
         document.querySelector('#chathistory').append(li);
     });
     /*

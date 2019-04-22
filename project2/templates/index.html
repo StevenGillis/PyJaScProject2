@@ -2,7 +2,7 @@
 <html>
     <head>
         <script src="{{ url_for('static', filename='index.js') }}"></script>
-        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js" ></script>
         <title>Chatbox test</title>
         <link href="/static/styles.css" rel="stylesheet"/>
     </head>
@@ -31,8 +31,8 @@
                         </ul>
                 </div>
             </div>
-            <div class="col">
-                <h3>User: Steven</h3>
+            <div class="col username">
+                <h3>User: <div>{{username}}</div></h3>
             </div>
         </div>
     </div>
