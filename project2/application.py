@@ -24,9 +24,10 @@ def login():
     #  Request the username
     else:
         username = request.form.get("username")
-    return index(username=username)
+        return index(username=username)
 
 @socketio.on("submit message")
 def newMessage(data):
     message = data["message"]
-    emit("announce message", {"message": message}, broadcast=True)
+    usernameSend = data["usernameSend"]
+    emit("announce message", {"message": message, "usernameSend": usernameSend}, broadcast=True)

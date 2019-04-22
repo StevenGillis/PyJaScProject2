@@ -11,7 +11,8 @@
         console.log('printed');
         message = document.querySelector('#chattext').value;
         console.log(message);
-        socket.emit('submit message', {"message": message});
+        usernameSend = "gebruikersnaam";
+        socket.emit('submit message', {"message": message, "usernameSend": usernameSend});
         return false;
         };
     });
@@ -21,8 +22,9 @@
     socket.on('announce message', data => {
         console.log('gehoord');
         const li = document.createElement('li');
-        li.innerHTML = `${data.message}`;
+        li.innerHTML = `${data.usernameSend}: ${data.message}`;
         document.querySelector('#chathistory').append(li);
+        return false;
     });
     /*
     //borrowed from class
