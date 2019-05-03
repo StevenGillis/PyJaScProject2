@@ -1,9 +1,13 @@
 import os
 from flask import Flask, render_template, session, request
 from flask_socketio import SocketIO, emit
+import json
 #broken pipe issue
 #from signal import signal, SIGPIPE, SIG_DFL
 #signal(SIGPIPE,SIG_DFL)
+
+#Biggest learning=> Pingpong of variables across html/js/application is a pain
+#multi level dictionary for chat history with possibility to get extended if new channel is added
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
@@ -13,7 +17,18 @@ socketio = SocketIO(app)
 
 # set channels as a global dictionary
 channels = [ 'Default Channel' ,'Channel2' ]
-
+messagehistory = []
+messagehistory2 = {"Default Channel": {
+                                  "name": "Default Channel",
+                                  "messages": ["whatisthismessage", "secondmessage"]
+                                },
+                   "Channel2": {
+                                    "name": "Channel2",
+                                    "messages": ["messagechannel2", "anothermessage"]
+                                }
+                   }
+messagehistory3 = {"name": "Default Channel",
+                   "messages": ["whatisthismessage", "secondmessage"]}
 
 @app.route("/")
 def index(username = "non"):
@@ -37,10 +52,12 @@ def login():
 @app.route("/changechannel/<string:channelname>", methods=["GET", "POST"])
 def changeChannel(channelname):
     currentchannel = channelname
-    return render_template("index.html", username=session['username'], channels=channels, currentchannel=currentchannel)
+    messagehistory=messagehistory2[currentchannel]["messages"]
+    return render_template("index.html", username=session['username'], channels=channels, currentchannel=currentchannel, messagehistory=messagehistory)
 
 @socketio.on("submit message")
 def newMessage(data):
     message = data["message"]
     usernameSend = session['username']
+    messagehistory.append(usernameSend + ": " + message)
     emit("announce message", {"message": message, "usernameSend": usernameSend}, broadcast=True)

@@ -10,8 +10,11 @@
     <div class="container">
         <div class="row">
             <div class="chatwindow col">
-                    <h3> {{currentchannel}} </h3>
+                    <h3 id="currentchannel"> {{currentchannel}} </h3>
                     <ul id="chathistory" style="list-style-type:none;">
+                        {% for message in messagehistory %}
+                        <li> {{message}}</li>
+                        {% endfor %}
                     </ul>
             </div>
             <div class="col">
@@ -32,7 +35,7 @@
                     {% for channel in channels %}
                     <li><a href="/changechannel/{{channel}}"> {{channel}} </a></li>
                     {% endfor %}
-                        </ul>
+                    </ul>
                 </div>
             </div>
             <div class="col">
