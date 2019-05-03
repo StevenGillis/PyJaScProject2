@@ -8,6 +8,7 @@ import json
 
 #Biggest learning=> Pingpong of variables across html/js/application is a pain
 #multi level dictionary for chat history with possibility to get extended if new channel is added
+#No consistency in logic. Is it in Javascript(add channel to dictionary) or Application (Change channel)
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
@@ -17,18 +18,17 @@ socketio = SocketIO(app)
 
 # set channels as a global dictionary
 channels = [ 'Default Channel' ,'Channel2' ]
-messagehistory = []
+currentchannel = channels[0]
+
 messagehistory2 = {"Default Channel": {
                                   "name": "Default Channel",
-                                  "messages": ["whatisthismessage", "secondmessage"]
+                                  "messages": []
                                 },
                    "Channel2": {
                                     "name": "Channel2",
-                                    "messages": ["messagechannel2", "anothermessage"]
+                                    "messages": []
                                 }
                    }
-messagehistory3 = {"name": "Default Channel",
-                   "messages": ["whatisthismessage", "secondmessage"]}
 
 @app.route("/")
 def index(username = "non"):
@@ -51,13 +51,25 @@ def login():
 
 @app.route("/changechannel/<string:channelname>", methods=["GET", "POST"])
 def changeChannel(channelname):
+    global currentchannel
     currentchannel = channelname
+    #load chat history of this channel
     messagehistory=messagehistory2[currentchannel]["messages"]
     return render_template("index.html", username=session['username'], channels=channels, currentchannel=currentchannel, messagehistory=messagehistory)
+
+@app.route("/addchannel", methods=["GET", "POST"])
+def addChannel():
+    print("addchannel works")
+    messagehistory2["newchannel"] = {}
+    return render_template("index.html", username=session['username'], channels=channels, currentchannel=currentchannel)
 
 @socketio.on("submit message")
 def newMessage(data):
     message = data["message"]
     usernameSend = session['username']
-    messagehistory.append(usernameSend + ": " + message)
-    emit("announce message", {"message": message, "usernameSend": usernameSend}, broadcast=True)
+    #make sure that the saved message history is never more than 100 messages
+    if len(messagehistory2[currentchannel]["messages"]) >= 10:
+        del messagehistory2[currentchannel]["messages"][0]
+    else:
+        messagehistory2[currentchannel]["messages"].append(usernameSend + ": " + message)
+        emit("announce message", {"message": message, "usernameSend": usernameSend}, broadcast=True)

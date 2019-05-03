@@ -51,13 +51,13 @@
 
           // Create new item for list
         const li = document.createElement('li');
-        li.innerHTML = document.querySelector('#channelname').value;
+        newchannelname = document.querySelector('#channelname').value;
+        li.innerHTML = newchannelname
 
         //Appends to global variable
-        //channels.push(document.querySelector('#channelname').value);
+
         // Add new item to the screen list of channels
         document.querySelector('#channellist').append(li);
-
 
         // Clear input field
         document.querySelector('#channelname').value = '';
