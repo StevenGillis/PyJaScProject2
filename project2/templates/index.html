@@ -10,6 +10,7 @@
     <div class="container">
         <div class="row">
             <div class="chatwindow col">
+                    <h3> {{currentchannel}} </h3>
                     <ul id="chathistory" style="list-style-type:none;">
                     </ul>
             </div>
@@ -28,11 +29,14 @@
                         <input type="submit">
                     </form>
                     <ul id="channellist">
+                    {% for channel in channels %}
+                    <li><a href="/changechannel/{{channel}}"> {{channel}} </a></li>
+                    {% endfor %}
                         </ul>
                 </div>
             </div>
             <div class="col">
-                <h3>User: <div class="username">{{username}}</div></h3>
+                <h3>User: <div class="username" id="username">{{username}}</div></h3>
             </div>
         </div>
     </div>

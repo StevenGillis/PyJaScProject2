@@ -8,11 +8,10 @@
     socket.on('connect', () => {
         console.log('socketIO is connected');
         document.querySelector('#chatsubmit').onsubmit = () => {
-        console.log('printed');
         message = document.querySelector('#chattext').value;
-        console.log(message);
-        usernameSend = "gebruikersnaam";
+        usernameSend = "placeholder for username"
         socket.emit('submit message', {"message": message, "usernameSend": usernameSend});
+        document.querySelector('#chattext').value = '';
         return false;
         };
     });
@@ -20,7 +19,6 @@
     //var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
     //When a chat message has been emited by other user I wan't to register this
     socket.on('announce message', data => {
-        console.log('gehoord');
         const li = document.createElement('li');
         li.innerHTML = `${data.usernameSend}: ${data.message}`;
         document.querySelector('#chathistory').append(li);
@@ -51,12 +49,15 @@
 
     document.querySelector('#addchannel').onsubmit = () => {
 
-        // Create new item for list
+          // Create new item for list
         const li = document.createElement('li');
         li.innerHTML = document.querySelector('#channelname').value;
 
-        // Add new item to task list
+        //Appends to global variable
+        //channels.push(document.querySelector('#channelname').value);
+        // Add new item to the screen list of channels
         document.querySelector('#channellist').append(li);
+
 
         // Clear input field
         document.querySelector('#channelname').value = '';
