@@ -9,6 +9,7 @@ import json
 #Biggest learning=> Pingpong of variables across html/js/application is a pain
 #multi level dictionary for chat history with possibility to get extended if new channel is added
 #No consistency in logic. Is it in Javascript(add channel to dictionary) or Application (Change channel)
+#Appending child <a> inside <li> with javascript
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
@@ -39,6 +40,7 @@ def index(username = "non"):
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
+    print("check if print works")
     # Make sure you always have to put a username
     if request.method == "GET":
         return index()
@@ -51,16 +53,28 @@ def login():
 
 @app.route("/changechannel/<string:channelname>", methods=["GET", "POST"])
 def changeChannel(channelname):
+    print(channelname)
+    # make sure thedata for the new channel is added
+    if channelname not in channels:
+        addChannel(channelname)
     global currentchannel
     currentchannel = channelname
     #load chat history of this channel
     messagehistory=messagehistory2[currentchannel]["messages"]
     return render_template("index.html", username=session['username'], channels=channels, currentchannel=currentchannel, messagehistory=messagehistory)
 
-@app.route("/addchannel", methods=["GET", "POST"])
-def addChannel():
-    print("addchannel works")
-    messagehistory2["newchannel"] = {}
+# Adding data for new channel
+@app.route("/addchannel/<string:channelname>", methods=["GET", "POST"])
+def addChannel(channelname):
+    print(channelname)
+    channels.append(channelname)
+    newdata={channelname: {
+                                  "name": channelname,
+                                  "messages": []
+                                }}
+    messagehistory2.update(newdata)
+    print(messagehistory2)
+    # messagehistory2["newchannel"] = {}
     return render_template("index.html", username=session['username'], channels=channels, currentchannel=currentchannel)
 
 @socketio.on("submit message")

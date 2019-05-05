@@ -50,14 +50,24 @@
     document.querySelector('#addchannel').onsubmit = () => {
 
           // Create new item for list
-        const li = document.createElement('li');
-        newchannelname = document.querySelector('#channelname').value;
-        li.innerHTML = newchannelname
+                const li = document.createElement('li');
+                newchannelname = document.querySelector('#channelname').value;
+           // Create <a> for link
+                var a = document.createElement('a');
+                //document.body.appendChild(li);
+                var linkname = "/changechannel/" + newchannelname ;
+                a.setAttribute("href",linkname);
 
+                //li.innerHTML = newchannelname;
+                a.innerHTML = newchannelname;
         //Appends to global variable
 
         // Add new item to the screen list of channels
-        document.querySelector('#channellist').append(li);
+        //document.querySelector('#channellist').append(li);
+        //document.querySelector('#channellist').append(a);
+        li.appendChild(a);
+        document.querySelector('#channellist').appendChild(li);
+
 
         // Clear input field
         document.querySelector('#channelname').value = '';
