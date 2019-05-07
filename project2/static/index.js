@@ -49,9 +49,13 @@
 
     document.querySelector('#addchannel').onsubmit = () => {
 
+
+          newchannelname = document.querySelector('#channelname').value;
+
           // Create new item for list
+
                 const li = document.createElement('li');
-                newchannelname = document.querySelector('#channelname').value;
+
            // Create <a> for link
                 var a = document.createElement('a');
                 //document.body.appendChild(li);

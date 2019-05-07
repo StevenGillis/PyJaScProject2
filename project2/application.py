@@ -1,4 +1,5 @@
 import os
+import datetime
 from flask import Flask, render_template, session, request
 from flask_socketio import SocketIO, emit
 import json
@@ -18,15 +19,15 @@ app.config["SESSION_TYPE"] = "filesystem"
 socketio = SocketIO(app)
 
 # set channels as a global dictionary
-channels = [ 'Default Channel' ,'Channel2' ]
+channels = [ 'Default Channel' ,'Existing channel' ]
 currentchannel = channels[0]
 
 messagehistory2 = {"Default Channel": {
                                   "name": "Default Channel",
                                   "messages": []
                                 },
-                   "Channel2": {
-                                    "name": "Channel2",
+                   "Existing channel": {
+                                    "name": "Existing channel",
                                     "messages": []
                                 }
                    }
@@ -81,6 +82,9 @@ def addChannel(channelname):
 def newMessage(data):
     message = data["message"]
     usernameSend = session['username']
+    timestamp = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    print(timestamp)
+    usernameSend = usernameSend + " "+ str(timestamp)
     #make sure that the saved message history is never more than 100 messages
     if len(messagehistory2[currentchannel]["messages"]) >= 10:
         del messagehistory2[currentchannel]["messages"][0]
