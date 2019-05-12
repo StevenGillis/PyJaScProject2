@@ -4,10 +4,6 @@ from flask import Flask, render_template, session, request
 from flask_socketio import SocketIO, emit
 import re
 import string
-import json
-#broken pipe issue
-#from signal import signal, SIGPIPE, SIG_DFL
-#signal(SIGPIPE,SIG_DFL)
 
 #Biggest learning=> Pingpong of variables across html/js/application is a pain
 #multi level dictionary for chat history with possibility to get extended if new channel is added
@@ -86,13 +82,11 @@ def newMessage(data):
     channel = data["channel"]
     usernameSend = session['username']
     timestamp = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    print(timestamp)
     usernameSend = usernameSend + " "+ str(timestamp)
     #make sure that the saved message history is never more than 100 messages
     if len(messagehistory2[currentchannel]["messages"]) >= 100:
         del messagehistory2[currentchannel]["messages"][0]
     messagehistory2[currentchannel]["messages"].append(usernameSend + ": " + message)
-    print(messagehistory2)
     emit("announce message", {"message": message, "channel": channel,"usernameSend": usernameSend}, broadcast=True)
 
 def badwordsfilter(message):
